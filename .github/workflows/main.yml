@@ -37,6 +37,7 @@ jobs:
           latexmk_use_lualatex: true
           extra_system_packages: "font-liberation ncurses ttf-dejavu"
           latexmk_shell_escape: true
+          latexmk_use_biber: true
 
       - name: Get short SHA for commit
         id: sha_short
