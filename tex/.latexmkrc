@@ -1,0 +1,1 @@
+$ENV{'TERM'} = 'dumb';
