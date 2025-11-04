@@ -21,26 +21,20 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v5
 
-      - name: Cache TikZ externalized pictures
-        uses: actions/cache@v4
-        with:
-          path: tex/figures/externalized
-          key: tikz-externalized
-
-      - name: Prepare environment for TikZ
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ncurses-bin
-          mkdir -p tex/figures/externalized
+      # - name: Cache TikZ externalized pictures
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: tex/figures/externalized
+      #     key: tikz-externalized
 
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: FormalLanguageConstrainedReachabilityLectureNotes.tex
-          working_directory: tex
+          root_file: tex/FormalLanguageConstrainedReachabilityLectureNotes.tex
+          work_in_root_file_dir: true
           latexmk_use_lualatex: true
-          latexmk_shell_escape: true
           extra_system_packages: "font-liberation"
+          latexmk_shell_escape: true
 
       - name: Get short SHA for commit
         id: sha_short
