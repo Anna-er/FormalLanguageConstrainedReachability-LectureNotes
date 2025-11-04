@@ -37,7 +37,10 @@ jobs:
           latexmk_use_lualatex: true
           extra_system_packages: "font-liberation ncurses ttf-dejavu"
           latexmk_shell_escape: true
-          latexmk_use_biber: true
+          post_compile: |
+            biber FormalLanguageConstrainedReachabilityLectureNotes
+            latexmk -lualatex -shell-escape -interaction=nonstopmode -halt-on-error tex/FormalLanguageConstrainedReachabilityLectureNotes.tex
+
 
       - name: Get short SHA for commit
         id: sha_short
