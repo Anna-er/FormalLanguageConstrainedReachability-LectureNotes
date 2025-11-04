@@ -1,6 +1,6 @@
 \chapter{Алгоритм на основе нисходящего анализа}
 
-В данном разделе мы рассмотрим семейство алгоритмов нисходящего синтаксического (рекурсивный спуск, LL, GLL~\cite{Scott:2010:GP:1860132.1860320,10.1007/978-3-662-46663-6_5}) рассмотрим их обощение для задачи поиска путей с контекстно-свободными ограничениями.
+В данном разделе мы рассмотрим семейство алгоритмов нисходящего синтаксического (рекурсивный спуск, LL, GLL~\cite{Scott:2010:GP:1860132.1860320,10.1007/978-3-662-46663-6_5}) и их обобщение для задачи поиска путей с контекстно-свободными ограничениями.
 
 % и GLL~\cite{Grigorev:2017:CPQ:3166094.3166104} Другие реализации~\cite{MEDEIROS201975}
 
@@ -14,7 +14,7 @@
 
 У такого подхода есть два ограничения:
 \begin{enumerate}
-  \item Не работает с леворекурсивными грамматиками, грамматиками, в которых вывод может принимать следующий вид:
+  \item Не работает с леворекурсивными грамматиками, то есть грамматиками, вывод в которых может принимать следующий вид:
   $$
   S \to \cdots \to \underline{N_i} \alpha \to \cdots \underline{N_i} \beta \to \cdots \omega
   $$
@@ -27,31 +27,31 @@
 
 \begin{algorithm}
   \floatname{algorithm}{Listing}
-\begin{algorithmic}[1]
-\caption{Функция рекурсивного спуска}
-\Function{S}{$\omega$}
-    \If {(len$(\omega)=0$)}
-    \Comment{{\footnotesize Пустая цепочка выводима из $S$}}
-    \State{\Return \textit{(true, $\omega$)}}
-    \EndIf
+%\begin{algorithmic}[1]
+%\caption{Функция рекурсивного спуска}
+%\Function{S}{$\omega$}
+%    \If {(len$(\omega)=0$)}
+%    \Comment{{\footnotesize Пустая цепочка выводима из $S$}}
+%    \State{\Return \textit{(true, $\omega$)}}
+%    \EndIf
 
-    \If{$(\omega = a :: tl)$}
-        \Comment{{\footnotesize Выводимая из $S$ подстрока должна начинаться с $a$}}
-        \State{$res,tl' = $ S($tl$)}
-        \Comment{{\footnotesize Затем должна идти подстрока, выводимая из $S$}}
-        \If{res \&\&  $tl' = b :: tl''$}
-           \Comment{{\footnotesize Если вызов закончился успешно, то надо проверить, что следующий символ --- это $b$}}
-           \State{\Return $S(tl'')$}
-           \Comment{{\footnotesize И снова попробовать вывести перфикс из $S$}}
-         \Else
-           \State{\Return \textit{(false, $tl'$)}}
-        \EndIf
-    \Else
-        \State{\Return \textit{(false, $\omega$)}}
-    \EndIf
-\EndFunction
+%    \If{$(\omega = a :: tl)$}
+%        \Comment{{\footnotesize Выводимая из $S$ подстрока должна начинаться с $a$}}
+%        \State{$res,tl' = $ S($tl$)}
+%        \Comment{{\footnotesize Затем должна идти подстрока, выводимая из $S$}}
+%        \If{res \&\&  $tl' = b :: tl''$}
+%           \Comment{{\footnotesize Если вызов закончился успешно, то надо проверить, что следующий символ --- это $b$}}
+%           \State{\Return $S(tl'')$}
+%           \Comment{{\footnotesize И снова попробовать вывести перфикс из $S$}}
+%         \Else
+%           \State{\Return \textit{(false, $tl'$)}}
+%        \EndIf
+%    \Else
+%        \State{\Return \textit{(false, $\omega$)}}
+%    \EndIf
+%\EndFunction
 
-\end{algorithmic}
+%\end{algorithmic}
 \end{algorithm}
 \end{example}
 
@@ -110,6 +110,7 @@ LL(k) --- алгоритм синтаксического анализа --- н�
   \[ \first[k](\alpha) = \{ \omega \in \Sigma^* \mid \alpha \derives{} \omega \text{ и } |\omega| < k \text{ либо } \exists \beta: \alpha \derives{} \omega \beta \text{ и } |\omega| = k \}
   \]
   , где $\alpha, \beta \in (N \cup \Sigma)^*.$
+  Далее в алгоритме построения множества $\first[k]$ это наглядно показано.
 \end{definition}
 
 \begin{definition}
@@ -119,9 +120,9 @@ LL(k) --- алгоритм синтаксического анализа --- н�
 
 В частном случае для $k = 1$:
 
-\[ \first(\alpha) = \{ a \in \Sigma \mid \exists \gamma \in (N \cup \Sigma)^*: \alpha \derives{} a \gamma \} \text{, где } \alpha \in (N \cup \Sigma)^* \]
+\[ \first(\alpha) = \{ a \in \Sigma \mid \exists \gamma \in (N \cup \Sigma)^*: \alpha \derives{} a \gamma \} \text{, где } \alpha \in (N \cup \Sigma)^* \} \]
 
-\[ \follow(\beta) = \{ a \in \Sigma \mid \exists \gamma, \alpha \in (N \cup \Sigma)^* : S \derives{} \gamma \beta a \alpha \} \text{, где } \beta \in (N \cup \Sigma)^*  \]
+\[ \follow(\beta) = \{ a \in \Sigma \mid \exists \gamma, \alpha \in (N \cup \Sigma)^* : S \derives{} \gamma \beta a \alpha \} \text{, где } \beta \in (N \cup \Sigma)^* \} \]
 
 Множество $\first$ можно вычислить, пользуясь следующими соотношениями:
 
@@ -129,7 +130,7 @@ LL(k) --- алгоритм синтаксического анализа --- н�
   \item $\first(a \alpha) = \{a\}, a \in \Sigma, \alpha \in (N \cup \Sigma)^* $
   \item $\first(\varepsilon) = \{\varepsilon\}$
   \item $\first(\alpha \beta) = \first(\alpha) \cup (\first(\beta) \text{, если } \varepsilon \in \first(\alpha))$
-  \item $\first(A) = \first(\alpha) \cup \first(\beta) \text{, если в грамматике есть правило } A \to \alpha \mid\beta$
+  \item $\first(A) = \first(\alpha) \cup \first(\beta) \text{, если в грамматике есть правила } A \to \alpha \mid\beta$
 \end{itemize}
 
 Алгоритм для вычисления множества $\follow$:
@@ -139,7 +140,7 @@ LL(k) --- алгоритм синтаксического анализа --- н�
   \item $\follow(S) = \follow(S) \cup \{\$\} \text{, где } S \text{--- стартовый нетерминал}$
   \item Для всех правил вида $A \to \alpha X \beta: \follow(X) = \follow(X) \cup (\first(\beta) \setminus \{\varepsilon\} )$
   \item Для всех правил вида $A \to \alpha X \text{ и } A \to \alpha X \beta \text{, где } \varepsilon \in \first(\beta): \follow(X) = \follow(X) \cup \follow(A)$
-  \item Последние два пункта применяются пока есть что добавлять в строящиеся множества.
+  \item Последние два пункта применяются, пока есть что добавлять в строящиеся множества.
 \end{itemize}
 
 
@@ -155,16 +156,13 @@ LL(k) --- алгоритм синтаксического анализа --- н�
 
 Пример множеств $\first$ для нетерминалов грамматики $G$:
 
-\begin{multicols}{2}
-
-\columnbreak
-
+% \begin{multicols}{2}
 \begin{align*}
   \first(S)  &= \{ a \}  & \first(B)  &= \{ c, \varepsilon \} \\
   \first(A)  &= \{ a, \varepsilon \} & \first(S') &= \{ a, b, \varepsilon \}\\
   \first(A') &= \{ a, b \}
 \end{align*}
-\end{multicols}
+% \end{multicols}
 
 Пример множеств $\follow$ для нетерминалов грамматики $G$:
 
@@ -204,7 +202,7 @@ $S$ & $\{ a, \varepsilon \}$ & $\{ b, \$ \}$ & $S \rightarrow aSbS$ & $S \righta
 Интерпретатор автомата принимает входную строку и построенную управляющую таблицу и работает следующим образом.
 В каждый момент времени конфигурация автомата это позиция во входной строке и стек.
 В начальный момент времени стек пуст, а позиция во входной строке соответствует её началу.
-На первом шаге в стек добавляются последовательно сперва символ концы строки, затем стартовый нетерминал.
+На первом шаге в стек добавляются последовательно сперва символ конца строки, затем стартовый нетерминал.
 На каждом шаге анализируется существующая конфигурация и совершается одно из действий.
 \begin{itemize}
 \item Если текущая позиция --- конец строки и вершина стека --- символ конца строки, то успешно завершаем разбор.
@@ -215,7 +213,7 @@ $S$ & $\{ a, \varepsilon \}$ & $\{ b, \$ \}$ & $S \rightarrow aSbS$ & $S \righta
 \begin{example}Пример работы LL анализатора.
 Рассмотрим грамматику $S \to aSbS \mid \varepsilon$ и выводимое слово $\omega = abab$.
 
-Расмотрим пошагово работу алгоритма, будем использовать таблицу, построенную в предыдущем примере:
+Расмотрим пошагово работу алгоритма c построением дерева, будем использовать таблицу, построенную в предыдущем примере:
 
 \begin{enumerate}
   \item Начало работы.
@@ -264,6 +262,14 @@ $S$ & $\{ a, \varepsilon \}$ & $\{ b, \$ \}$ & $S \rightarrow aSbS$ & $S \righta
         \textcolor{red}{a} & b & a & b & \$ \\ \hline
     \end{tabular}
 
+    \begin{center}
+      \resizebox{1cm}{1cm}{
+    \begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=1.8cm]
+      \node[symbol_node] (s_0)   {$S$};
+    \end{tikzpicture}
+    }
+  \end{center}
+
 \item Снимаем терминал $a$ со стека и двигаем указатель.
 
     Стек: \,
@@ -280,6 +286,20 @@ $S$ & $\{ a, \varepsilon \}$ & $\{ b, \$ \}$ & $S \rightarrow aSbS$ & $S \righta
         a & \textcolor{red}{b} & a & b & \$ \\ \hline
     \end{tabular}
 
+    \begin{center}
+      \resizebox{1.5cm}{1.3cm}{
+    \begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=1.8cm]
+
+      \node[symbol_node] (s_0)   {$S$};
+      \node[symbol_node] (a_0) [below =of s_0]  {$a$};
+
+      \path[->]
+      (s_0) edge (a_0)
+      ;
+    \end{tikzpicture}
+    }
+  \end{center}
+
 \item Ищем ячейку с координатами (S, b), применяем продукцию из ячейки.
 
     Стек: \,
@@ -295,6 +315,23 @@ $S$ & $\{ a, \varepsilon \}$ & $\{ b, \$ \}$ & $S \rightarrow aSbS$ & $S \righta
         a & \textcolor{red}{b} & a & b & \$ \\ \hline
     \end{tabular}
 
+    \begin{center}
+      \resizebox{3cm}{2cm}{
+    \begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=1.8cm]
+
+      \node[symbol_node] (s_0)   {$S$};
+      \node[symbol_node] (a_0) [below =of s_0]  {$a$};
+      \node[symbol_node] (s_1) [right =of a_0]  {$S$};
+      \node[symbol_node] (eps_1) [below =of s_1]  {$\varepsilon$};
+      \path[->]
+      (s_0) edge (a_0)
+      (s_0) edge (s_1)
+      (s_1) edge (eps_1)
+      ;
+    \end{tikzpicture}
+  }
+\end{center}
+
 \item Снимаем терминал $b$ со стека и двигаем указатель.
 
     Стек: \,
@@ -308,6 +345,26 @@ $S$ & $\{ a, \varepsilon \}$ & $\{ b, \$ \}$ & $S \rightarrow aSbS$ & $S \righta
         \hline
         a & b & \textcolor{red}{a} & b & \$ \\ \hline
     \end{tabular}
+
+    \begin{center}
+      \resizebox{3cm}{2cm}{
+    \begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=1.8cm]
+
+      \node[symbol_node] (s_0)   {$S$};
+      \node[symbol_node] (s_1) [below =of s_0]  {$S$};
+      \node[symbol_node] (a_0) [left =of s_1]  {$a$};
+      \node[symbol_node] (b_0) [right =of s_1]  {$b$};
+      \node[symbol_node] (eps_1) [below =of s_1]  {$\varepsilon$};
+
+      \path[->]
+      (s_0) edge (a_0)
+      (s_0) edge (s_1)
+      (s_0) edge (b_0)
+      (s_1) edge (eps_1)
+      ;
+    \end{tikzpicture}
+  }
+\end{center}
 
   \item Ищем ячейку с координатами (S, a), применяем продукцию из ячейки.
 
@@ -326,6 +383,28 @@ $S$ & $\{ a, \varepsilon \}$ & $\{ b, \$ \}$ & $S \rightarrow aSbS$ & $S \righta
         a & b & \textcolor{red}{a} & b & \$ \\ \hline
     \end{tabular}
 
+    \begin{center}
+      \resizebox{5cm}{3cm}{
+    \begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=1.8cm]
+
+      \node[symbol_node] (s_0)   {$S$};
+      \node[symbol_node] (s_1) [below =of s_0]  {$S$};
+      \node[symbol_node] (a_0) [left =of s_1]  {$a$};
+      \node[symbol_node] (b_0) [right =of s_1]  {$b$};
+      \node[symbol_node] (s_2) [right =of b_0]  {$S$};
+      \node[symbol_node] (eps_1) [below =of s_1]  {$\varepsilon$};
+
+      \path[->]
+      (s_0) edge (a_0)
+      (s_0) edge (s_1)
+      (s_0) edge (b_0)
+      (s_0) edge (s_2)
+      (s_1) edge (eps_1)
+      ;
+    \end{tikzpicture}
+    }
+  \end{center}
+
 \item Снимаем терминал $a$ со стека и двигаем указатель.
 
     Стек: \,
@@ -342,6 +421,30 @@ $S$ & $\{ a, \varepsilon \}$ & $\{ b, \$ \}$ & $S \rightarrow aSbS$ & $S \righta
         a & b & a & \textcolor{red}{b} & \$ \\ \hline
     \end{tabular}
 
+    \begin{center}
+      \resizebox{6cm}{3.5cm}{
+    \begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=1.8cm]
+
+      \node[symbol_node] (s_0)   {$S$};
+      \node[symbol_node] (s_1) [below =of s_0]  {$S$};
+      \node[symbol_node] (a_0) [left =of s_1]  {$a$};
+      \node[symbol_node] (b_0) [right =of s_1]  {$b$};
+      \node[symbol_node] (s_2) [right =of b_0]  {$S$};
+      \node[symbol_node] (a_1) [below =of s_2]  {$a$};
+      \node[symbol_node] (eps_1) [below =of s_1]  {$\varepsilon$};
+
+      \path[->]
+      (s_0) edge (a_0)
+      (s_0) edge (s_1)
+      (s_0) edge (b_0)
+      (s_0) edge (s_2)
+      (s_2) edge (a_1)
+      (s_1) edge (eps_1)
+      ;
+    \end{tikzpicture}
+    }
+  \end{center}
+
 \item Ищем ячейку с координатами (S, b), применяем продукцию из ячейки.
 
     Стек: \,
@@ -357,6 +460,35 @@ $S$ & $\{ a, \varepsilon \}$ & $\{ b, \$ \}$ & $S \rightarrow aSbS$ & $S \righta
         a & b & a & \textcolor{red}{b} & \$ \\ \hline
     \end{tabular}
 
+    \begin{center}
+      \resizebox{6cm}{3.5cm}{
+    \begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=1.8cm]
+
+      \node[symbol_node] (s_0)   {$S$};
+      \node[symbol_node] (s_1) [below =of s_0]  {$S$};
+      \node[symbol_node] (a_0) [left =of s_1]  {$a$};
+      \node[symbol_node] (b_0) [right =of s_1]  {$b$};
+      \node[symbol_node] (s_2) [right =of b_0]  {$S$};
+      \node[symbol_node] (s_3) [below =of s_2]  {$S$};
+      \node[symbol_node] (a_1) [left =of s_3]  {$a$};
+      \node[symbol_node] (eps_1) [below =of s_1]  {$\varepsilon$};
+      \node[symbol_node] (eps_2) [below =of s_3]  {$\varepsilon$};
+
+
+      \path[->]
+      (s_0) edge (a_0)
+      (s_0) edge (s_1)
+      (s_0) edge (b_0)
+      (s_0) edge (s_2)
+      (s_2) edge (a_1)
+      (s_2) edge (s_3)
+      (s_1) edge (eps_1)
+      (s_3) edge (eps_2)
+      ;
+    \end{tikzpicture}
+    }
+  \end{center}
+
 \item Снимаем терминал $b$ со стека и двигаем указатель.
 
     Стек: \,
@@ -371,6 +503,36 @@ $S$ & $\{ a, \varepsilon \}$ & $\{ b, \$ \}$ & $S \rightarrow aSbS$ & $S \righta
         a & b & a & b & \textcolor{red}{\$} \\ \hline
     \end{tabular}
 
+    \begin{center}
+      \resizebox{6cm}{3.5cm}{
+      \begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=1.8cm]
+
+      \node[symbol_node] (s_0)   {$S$};
+      \node[symbol_node] (s_1) [below =of s_0]  {$S$};
+      \node[symbol_node] (a_0) [left =of s_1]  {$a$};
+      \node[symbol_node] (b_0) [right =of s_1]  {$b$};
+      \node[symbol_node] (s_2) [right =of b_0]  {$S$};
+      \node[symbol_node] (s_3) [below =of s_2]  {$S$};
+      \node[symbol_node] (a_1) [left =of s_3]  {$a$};
+      \node[symbol_node] (b_1) [right =of s_3]  {$b$};
+      \node[symbol_node] (eps_1) [below =of s_1]  {$\varepsilon$};
+      \node[symbol_node] (eps_2) [below =of s_3]  {$\varepsilon$};
+
+      \path[->]
+      (s_0) edge (a_0)
+      (s_0) edge (s_1)
+      (s_0) edge (b_0)
+      (s_0) edge (s_2)
+      (s_2) edge (a_1)
+      (s_2) edge (s_3)
+      (s_2) edge (b_1)
+      (s_1) edge (eps_1)
+      (s_3) edge (eps_2)
+        ;
+    \end{tikzpicture}
+    }
+  \end{center}
+
 \item Ищем ячейку с координатами (S, \$), применяем продукцию из ячейки.
 
     Стек: \,
@@ -384,19 +546,53 @@ $S$ & $\{ a, \varepsilon \}$ & $\{ b, \$ \}$ & $S \rightarrow aSbS$ & $S \righta
         a & b & a & b & \textcolor{red}{\$} \\ \hline
     \end{tabular}
 
+    \begin{center}
+      \resizebox{6cm}{3.5cm}{
+      \begin{tikzpicture}[shorten >=1pt,on grid,auto,node distance=1.8cm]
+
+      \node[symbol_node] (s_0)   {$S$};
+      \node[symbol_node] (s_1) [below =of s_0]  {$S$};
+      \node[symbol_node] (a_0) [left =of s_1]  {$a$};
+      \node[symbol_node] (b_0) [right =of s_1]  {$b$};
+      \node[symbol_node] (s_2) [right =of b_0]  {$S$};
+      \node[symbol_node] (s_3) [below =of s_2]  {$S$};
+      \node[symbol_node] (a_1) [left =of s_3]  {$a$};
+      \node[symbol_node] (b_1) [right =of s_3]  {$b$};
+      \node[symbol_node] (s_4) [right =of b_1]  {$S$};
+      \node[symbol_node] (eps_1) [below =of s_1]  {$\varepsilon$};
+      \node[symbol_node] (eps_2) [below =of s_3]  {$\varepsilon$};
+      \node[symbol_node] (eps_3) [below =of s_4]  {$\varepsilon$};
+
+      \path[->]
+      (s_0) edge (a_0)
+      (s_0) edge (s_1)
+      (s_0) edge (b_0)
+      (s_0) edge (s_2)
+      (s_2) edge (a_1)
+      (s_2) edge (s_3)
+      (s_2) edge (b_1)
+      (s_2) edge (s_4)
+      (s_1) edge (eps_1)
+      (s_3) edge (eps_2)
+      (s_4) edge (eps_3)
+        ;
+    \end{tikzpicture}
+    }
+  \end{center}
+
 \item Оказались в конце строки и на вершине стека символ конца --- завершаем разбор.
 
 \end{enumerate}
 
 \end{example}
 
-Можно расширить данный алгоритм так, чтобы он строил дерево вывода. Дерево будет строиться сверху вниз, от корня к листьям. Для этого необходимо расширить шаги алгоритма.
+Дерево строится сверху вниз, от корня к листьям. Для этого выолняются следующие шаги алгоритма:
 \begin{itemize}
-  \item В ситуации, когда мы читаем очередной нетерминал (на вершине стека и во входе одинаковые терминалы), мы создаём лист с соответствующим терминалом.
+  \item В ситуации, когда мы читаем очередной терминал (на вершине стека и во входе одинаковые терминалы), мы создаём лист с соответствующим терминалом.
   \item В ситуации, когда мы заменяем нетерминал на стеке на правую часть продукции в соответствии с управляющей таблицей, мы создаём нетерминальный узел соответствующий применяемой продукции.
 \end{itemize}
 
-Данное семейство всё так же не работает с леворекурсивными грамматиками и с неоднозначными грамматиками.
+Данное семейство алгоритмов всё так же не работает с леворекурсивными грамматиками и с неоднозначными грамматиками.
 
 Таким образом, по некоторым грамматикам можно построить LL(k) анализатор (назовём их LL(k) грамматиками), но не по всем.
 С левой рекурсией, конечно, можно бороться, так как существуют алгоритмы устранения левой и скрытой левой рекурсии, а вот с неоднозначностями ничего не поделаешь.
@@ -408,7 +604,9 @@ $S$ & $\{ a, \varepsilon \}$ & $\{ b, \$ \}$ & $S \rightarrow aSbS$ & $S \righta
 Можно построить анализатор, работающий с произвольными КС-грамматиками.
 Generalized LL (GLL)~\cite{Scott:2010:GP:1860132.1860320,10.1007/978-3-662-46663-6_5}
 
-Принцип работы остается абсолютно таким же как и для табличного LL:
+Обзор:~\cite{Cappers2014ExploringAV}, история и т.д.~\cite{Afroozeh2019PracticalGT}
+
+Принцип работы остается абсолютно таким же, как для табличного LL:
 \begin{itemize}
   \item Сначала по грамматике строится \textit{управляющая} таблица
   \item Затем построенная таблица команд и непосредственно анализируемое слово поступают на вход абстрактному интерпретатору.
@@ -431,22 +629,22 @@ Generalized LL (GLL)~\cite{Scott:2010:GP:1860132.1860320,10.1007/978-3-662-46663
 Описанная пара позиций уже однозначно задает состояние синтаксического разбора. Имеем множество состояний и переходов между ними --- возникает естественное желание воспользоваться терминами графов для представления этой структуры. Такую конструкцию называют \textit{граф-структурированный стек} или \textit{GSS} (Graph Structured Stack), который впервые был предложен Масару Томитой ~\cite{tomita1988graph} в контексте восходящего анализа. GSS будет являться рабочей структурой нашего нового интерпретатора вместо стека для LL. Состояние разбора вместе с узлом GSS мы будет называть \textit{дескриптором}.
 
 \begin{definition}
-  Пусть $G = \langle N, \Sigma, P, S \rangle$~--- КС-грамматика, $X$ слот грамматики $G$, $i$ позиция в слове $ w $ над алфавитом $\Sigma$, а $ u $ узел GSS. \textit{Дескриптором} назовём тройку $ (X, u, i) $.
+  Пусть $G = \langle N, \Sigma, P, S \rangle$~--- КС-грамматика, $X$~--- слот грамматики $G$, $i$~--- позиция в слове $ w $ над алфавитом $\Sigma$, а $ u $~--- узел GSS. \textit{Дескриптором} назовём тройку $ (X, u, i) $.
 \end{definition}
 
-Есть несколько способов задания GSS для алгоритма GLL. Вариант, предложенный самими авторами алгоритма, оперирует непосредственно парами из позиции слова и слота грамматики в качестве состояний (и узлов графа) --- такой метод является довольно простым и наглядным, но, как описано в работе \cite{10.1007/978-3-662-46663-6_5}, не самым эффективным. Предложим сразу чуть более оптимальное представление: заметим, что шаги разбора, соответствующие одному и тому же нетерминалу и позиции слова, должны выдавать один и тот же результат независимо от конкретной продукции грамматики, в которой стоит этот нетерминал. Поэтому заводить по узлу на каждый слот грамматики довольно избыточно --- вместо этого в качестве состояния будет использовать пары из нетерминала и позиции слова, а позиции грамматики будем записывать на рёбрах.
+Есть несколько способов задания GSS для алгоритма GLL. Вариант, предложенный самими авторами алгоритма, оперирует непосредственно парами из позиции слова и слота грамматики в качестве состояний (и узлов графа). Такой метод является довольно простым и наглядным, но, как описано в работе \cite{10.1007/978-3-662-46663-6_5}, не самым эффективным. Предложим сразу чуть более оптимальное представление: заметим, что шаги разбора, соответствующие одному и тому же нетерминалу и позиции слова, должны выдавать один и тот же результат независимо от конкретной продукции грамматики, в которой стоит этот нетерминал. Поэтому заводить по узлу на каждый слот грамматики довольно избыточно --- вместо этого в качестве состояния будем использовать пары из нетерминала и позиции слова, а позиции грамматики будем записывать на рёбрах.
 
 Итак, мы научились задавать состояния с помощью дескрипторов, а также определились со вспомогательной структурой GSS. Теперь можно перейти к рассмотрению непосредственно самого алгоритма, суть которого довольно проста и напоминает BFS по неявному графу.
 
-Дескриптор задает состояние, которое необходимо обработать. При этом мы без какой-либо дополнительной информации можем продолжить анализ входа из состояния, задаваемого этим дескриптором. В процессе обработки мы можем получить несколько новых состояний. Поэтому будем поддерживать множество $ R $ дескрипторов на обработку --- на каждом шаге извлекаем один из множества, проводим анализ и кладем в множество новые полученные.
+Дескриптор задает состояние, которое необходимо обработать. При этом мы без какой-либо дополнительной информации можем продолжить анализ входа из состояния, задаваемого этим дескриптором. В процессе обработки мы можем получить несколько новых состояний. Поэтому будем поддерживать множество $ R $ дескрипторов на обработку --- на каждом шаге извлекаем один из множества, проводим анализ и добавляем во множество новые полученные.
 
-При каких условиях этот процесс будет конечен? Ну, например, если мы каждое состояние будем обрабатывать не более одного раза. И действительно, поскольку наш интерпретатор является ``чистым'' в том смысле, что для оного и того же состояния каждый раз будут получены одинаковые результаты, проводить анализ дважды не имеет смысла. Поэтому будем также поддерживать множество $ U $ всех полученных в ходе разбора дескрипторов, и добавлять в $ R $ только те, которых еще нет в $ U $.
+При каких условиях этот процесс будет конечен? Ну, например, если мы каждое состояние будем обрабатывать не более одного раза. И действительно, поскольку наш интерпретатор является ``чистым'' в том смысле, что для одного и того же состояния каждый раз будут получены одинаковые результаты, проводить анализ дважды не имеет смысла. Поэтому будем также поддерживать множество $ U $ всех полученных в ходе разбора дескрипторов, и добавлять в $ R $ только те, которых еще нет в $ U $.
 
 И наконец, заключительная и самая главная часть --- как происходит обработка дескриптора?
 Пусть дескриптор имеет вид $ (X, u, i) $, а входное слово обозначим $ W $. Есть три возможных варианта, в зависимости от вида позиции грамматики $ X $ --- разберем каждый из них по отдельности;
 
 \begin{itemize}
-  \item $ X ::= \alpha \cdot t \beta $, т.е. указатель смотрит на терминал --- в этом случае новых дескрипторов добавлено не будет. Если $ W[i] = t $, то мы сдвигаем указатель слота, переходя к рассмотрению $ X ::= \alpha t \cdot \beta $, и инкрементируем позицию $ i $ в слове. В противном же случае сразу переходим к следующему дескриптору, т.о. терминируя текущую ветвь разбора.
+  \item $ X ::= \alpha \cdot t \beta $, т.е. указатель смотрит на терминал --- в этом случае новых дескрипторов добавлено не будет. Если $ W[i] = t $, то мы сдвигаем указатель слота, переходя к рассмотрению $ X ::= \alpha t \cdot \beta $, и инкрементируем позицию $ i $ в слове. В противном же случае сразу переходим к следующему дескриптору, таким образом терминируя текущую ветвь разбора.
 
   \item $ X ::= \alpha \cdot A \beta $, т.е. указатель смотрит на нетерминал. Нам нужен GSS узел $ v $ вида $ (A, i) $ и ребро $ (u, X ::= \alpha A \cdot \beta, v) $ (ребро из $ u $ в $ v $ с пометкой $ X ::= \alpha A \cdot \beta $). Если такой узел и ребро уже существуют в нашем GSS, берем их, иначе --- создаём. Далее в $ R $ добавляем по дескриптору для узла $ v $ и каждого правила грамматики из ячейки управляющей таблицы для нетерминала $ A $ (конечно, если их еще не было в $ U $). На этом обработка текущего дескриптора завершается.
 
@@ -642,4 +840,3 @@ GLL довольно естественно обобщается на граф~\
 %  \item Проведите алгоритм GLL для грамматики $ S \to a S b S \mid \varepsilon$. Правда ли, что эта грамматика принадлежит классу $ LL(1) $? Пронаблюдайте, как использование GSS вырождается в работу с обычным стеком.
 %  \item Доразберите все не рассмотренные в примере \ref{gll:example1} дескрипторы, постройте полный GSS.
 %\end{enumerate}
-

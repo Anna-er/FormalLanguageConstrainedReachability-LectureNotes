@@ -1,0 +1,41 @@
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{external}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{automata}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\usetikzlibrary{fit}
+
+
+\tikzsetexternalprefix{figures/externalized/}
+
+% Required in RegularLanguages
+\tikzset{snake it/.style={decorate, decoration=snake}}
+\tikzset{
+    side by side/.style 2 args={
+            line width=2pt,
+            #1,
+            postaction={
+                    clip,postaction={draw,#2}
+                }
+        }
+}
+
+\tikzstyle{r_state} = [shape=rectangle, draw, minimum size=0.2cm]
+\tikzstyle{symbol_node} = [shape=rectangle, rounded corners, draw, align=center]
+\tikzstyle{num_state} = [draw=none, fill=none, anchor=south west, red]
+\tikzstyle{prod_node} = [shape=rectangle, draw, align=center]
+
+\tikzset{elliptic state/.style={draw,ellipse}}
+
+\tikzset{
+    between/.style args={#1 and #2}{
+         at = ($(#1)!0.5!(#2)$)
+    },
+    >= stealth,
+    every state/.style={minimum size=1pt}
+}
