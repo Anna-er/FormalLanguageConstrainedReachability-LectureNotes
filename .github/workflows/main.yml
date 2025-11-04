@@ -27,11 +27,6 @@ jobs:
           path: tex/figures/externalized
           key: tikz-externalized
 
-      - name: Debug file presence
-        run: |
-          echo "Listing tex/ directory:"
-          ls -la tex/
-
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         env:
