@@ -27,6 +27,12 @@ jobs:
           path: tex/figures/externalized
           key: tikz-externalized
 
+      - name: Prepare environment for TikZ
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ncurses-bin
+          mkdir -p tex/figures/externalized
+
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
